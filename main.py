@@ -3,6 +3,12 @@ from graph.map import GRAPH, LOCATIONS
 
 
 def main():
+    print("Available locations:")
+    for point, location in LOCATIONS.items():
+        print(f"{point} — {location}")
+
+    print()
+
     start = input("Starting point: ").upper()
     finish = input("Endpoint: ").upper()
 
@@ -24,7 +30,7 @@ def main():
     print("Route:")
     print(" → ".join(route))
 
-    print(f"Distance : {distance} km")
+    print(f"Distance: {distance} km")
     print(f"Time: {time} min.")
 
     print()
