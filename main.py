@@ -1,5 +1,5 @@
-from graph.dijkstra import dijkstra
-from graph.map import GRAPH, LOCATIONS
+from graph.map import LOCATIONS
+from navigator.navigator import find_route
 
 
 def main():
@@ -12,32 +12,28 @@ def main():
     start = input("Starting point: ").upper()
     finish = input("Endpoint: ").upper()
 
-    if start not in GRAPH or finish not in GRAPH:
-        print("Error: unknown point.")
+    try:
+        result = find_route(start, finish)
+    except ValueError as error:
+        print(f"Error: {error}")
         return
 
-    route, distance, time = dijkstra(
-        GRAPH,
-        start,
-        finish,
-    )
-
-    if not route:
+    if result is None:
         print("Route not found.")
         return
 
-    print()
-    print("Route:")
-    print(" → ".join(route))
+    print("\n Route:")
 
-    print(f"Distance: {distance} km")
-    print(f"Time: {time} min.")
+    for i, point in enumerate(result["route"]):
+        print(f"{point} — {LOCATIONS[point]}", end="")
+        if i < len(result["route"]) - 1:
+            print(" → ", end="")
 
-    print()
-    print("Locations:")
-
-    for location in route:
-        print(f"{location} — {LOCATIONS[location]}")
+    print("\n")
+    print(f"Distance: {result['distance']} km")
+    print(f"Estimated time: {result['time']} min.")
+    print(f"Average traffic congestion level: {result['traffic']:.1f}")
+    print(f"Database Record ID: {result['id']}")
 
 
 if __name__ == "__main__":
