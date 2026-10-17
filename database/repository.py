@@ -50,18 +50,27 @@ def get_routes(
         return list(session.scalars(statement).all())
 
 
+def get_all_routes() -> list[Route]:
+    with SessionLocal() as session:
+        statement = select(Route).order_by(Route.created_at.desc())
+
+        return list(session.scalars(statement).all())
+
+
 def update_actual_result(
     route_id: int,
     actual_time: float,
     actual_distance: float,
-) -> None:
+) -> bool:
     with SessionLocal() as session:
         route = session.get(Route, route_id)
 
         if route is None:
-            raise ValueError("Route not found")
+            return False
 
         route.actual_time = actual_time
         route.actual_distance = actual_distance
 
         session.commit()
+
+        return True
