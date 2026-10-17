@@ -33,15 +33,43 @@ def main():
                 print("Route not found.")
                 continue
 
-            locations = " → ".join(
-                f"{point} ({LOCATIONS[point]})"
-                for point in result["route"]
+            print(
+                f"\nShortest route: "
+                f"{' → '.join(result['shortest_route'])}"
             )
+            print(f"Distance: {result['shortest_distance']} km")
+            print(f"Estimated time: {result['shortest_time']} min")
 
-            print(f"\nRoute: {locations}")
-            print(f"Distance: {result['distance']} km")
-            print(f"Estimated time: {result['time']} min")
-            print(f"Record ID: {result['id']}")
+            if result["source"] == "history":
+                locations = " → ".join(
+                    f"{point} ({LOCATIONS[point]})"
+                    for point in result["route"]
+                )
+
+                print("\nRecommended route:")
+                print(locations)
+                print(f"Distance: {result['distance']} km")
+                print(
+                    f"Estimated time based on graph: "
+                    f"{result['time']} min"
+                )
+                print(
+                    f"Estimated trip time: "
+                    f"{result['estimated_time']:.1f} min"
+                )
+                print(
+                    f"Based on {result['history_count']} completed trips."
+                )
+                print(f"Record ID: {result['id']}")
+
+            else:
+                print(
+                    "\nInsufficient trip history to recommend "
+                    "a personalized route."
+                )
+                print(
+                    "Only the shortest route is available."
+                )
 
         elif choice == "2":
             add_trip_result()
